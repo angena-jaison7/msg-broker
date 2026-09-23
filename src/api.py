@@ -51,6 +51,8 @@ def health_check():
 def publish_to_queue(queue_name: str, payload: TelemetryData, broker: RabbitMQClient = Depends(get_broker)):
     data_dict = payload.model_dump()
     success = broker.publish(queue_name=queue_name, payload=data_dict)
+    #if a sensor sends data to /api/publish/freezer_alerts, 
+    # the queue_name variable becomes "freezer_alerts"
     
     if not success:
         raise HTTPException(status_code=500, detail="Failed to publish message to broker.")
