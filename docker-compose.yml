@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: msg-broker
+    restart: always
+    ports:
+      # Port 5672: Used by backend applications (Python, FastAPI) to send/receive messages
+      - "5672:5672"
+      # Port 15672: Used to access the web-based Admin Management UI
+      - "15672:15672"   #rabbitmq
+      #login to http://localhost:15672/
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: historian
+    volumes:
+      # Persists queue data so nothing is lost if the container stops
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_data:
